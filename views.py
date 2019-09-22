@@ -25,7 +25,7 @@ DBSession = sessionmaker(bind=engine)
 app = Flask(__name__)
 
 CLIENT_ID = json.loads(
-    open('client_secret.json', 'r').read())['web']['client_id']
+    open('/var/www/CatalogApp/CatalogApp/client_secret.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "catalog app"
 
 
