@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="main">
+    <div class="item">
+        <h2> {{ item.title }} </h2>
+        <p> {{ item.description }}</p>
+        <br>
+        <a href='{{url_for("editItemInfo", item_name=item.title) }}'>Edit</a> |
+        <a href='{{url_for("deleteItemInfo", item_name=item.title) }}'>Delete</a>
+    </div>
+</section>
+{% endblock %}

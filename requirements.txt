@@ -1,0 +1,6 @@
+SQLAlchemy
+requests
+oauth2client
+flask
+google-oauth2-tool
+Flask-HTTPAuth

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="main">
+    {% if isowner %}
+    <div class="item">
+        <form action="#" method = 'post'>
+            <h2> Delete Item </h2>
+            <p> Are you sure you want to delete {{ item.title }}</p>
+            <button type="submit" class="btn btn-default delete" id="submit" type="submit">Delete</button>
+    </div>
+    {% else %}
+    <div class="error">
+        <h2> Sorry! You are not the owner of this item and you can not delete it</h2>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

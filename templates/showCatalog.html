@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="main">
+    <div class="catalogs">
+        <h2> Categories </h2>
+        {% for i in catalogs %}
+        <a href='{{url_for("showCatalogInfo", cat_name=i.name) }}'>{{i.name}}</a>
+        <br>
+        {% endfor %}
+    </div>
+    <div class="items">
+        {% block content %}
+        {% if count>1 %}
+            <h2> {{ count }} Items </h2>
+        {% else %}
+            <h2> {{ count }} Item </h2>
+        {% endif %}
+        {% endblock content %}
+        {% for i in items %}
+        <a href='{{url_for("showItemInfo", cat_name=i.cat_name, item_name=i.title) }}'>{{i.title}}</a>
+        <br>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

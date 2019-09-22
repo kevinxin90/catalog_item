@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block main %}
+
+<section class="main">
+{% if isowner %}
+    <div class="item">
+        <h2> Edit Item </h2>
+        
+    </div>
+    <form action="#" method = 'post'>
+        Title<br>
+        <input type="text" name="title" placeholder="{{ item.title }}" required><br><br>
+        Description<br>
+        <input type="text" name="description" placeholder="{{ item.description }}"><br><br>
+        Catalog<br>
+        <select name="catalog">
+            {% for i in catalogs %}
+            <option value='{{ i.name }}'>{{i.name}}</a>
+            {% endfor %}
+        </select><br><br>
+        <button type="submit" class="btn btn-default delete" id="submit" type="submit">Submit</button>
+
+    </form>
+</section>
+{% else %}
+    <div class="error">
+        <h2> Sorry! You are not the owner of this item and you can not edit it</h2>
+    </div>
+{% endif %}
+{% endblock %}
+

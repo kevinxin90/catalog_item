@@ -1,0 +1,51 @@
+<html>
+<head>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+  {% block head %}
+  {% endblock %}
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <section class="header-section">
+        <div class="header">
+            <div class="title">
+                <a href="/"><h1> Catalog App </h1></a>
+            </div>
+            <div class="loginbutton">
+                {% if loggedIn %}
+                <button type="button" id="logoutbutton" href='#' onclick="signOut()">Logout</button>
+                <button type="button" id="loginbutton" onclick="window.location.href = '/login';" style="display:None">Login</button>
+                {% else %}
+                <button type="button" id="logoutbutton" href='#' onclick="signOut()" style="display:None">Logout</button>
+                <button type="button" id="loginbutton" onclick="window.location.href = '/login';">Login</button>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    {% block main %}
+    {% endblock %}
+<script>
+  function signOut() {
+    $.ajax({
+      type: "GET",
+      url: '/gcdisconnect',
+      success: function(result) {
+        if (result) {
+          console.log(result);
+          $("#logoutbutton").hide();
+          $("#loginbutton").show();
+          $("#additem").hide();
+          $("#editdelete").hide();
+        } else {
+          console.log('There was an error')
+        }
+      }
+    });
+  }
+</script>
+</body>
+</html>

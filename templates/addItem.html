@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="main">
+    <div class="item">
+        <h2> Add Item </h2>
+        
+    </div>
+    <form action="#" method = 'post'>
+        Title<br>
+        <input type="text" name="title" required><br><br>
+        Description<br>
+        <input type="text" name="description"><br><br>
+        Catalog<br>
+        <select name="catalog">
+            {% for i in catalogs %}
+            <option value='{{ i.name }}'>{{i.name}}</a>
+            {% endfor %}
+        </select><br><br>
+        <button type="submit" class="btn btn-default delete" id="submit" type="submit">Submit</button>
+
+    </form>
+</section>
+{% endblock %}
+

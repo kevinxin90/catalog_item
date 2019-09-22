@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="307060915262-uqam2baatd4dk1d00kqbs21qk311c3cd.apps.googleusercontent.com">
+{% endblock %}
+{% block main %}
+<section class="main">
+    <p class="signInSpan">Sign in with your google account </p>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+</section>
+<script>
+    function connect(code) {
+        var promise = $.ajax({
+            type: "POST",
+            url: '/gconnect?state={{STATE}}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(code)
+        });
+        return promise;
+    };
+    function onSignIn(googleUser) {
+      access_token = googleUser.Zi.access_token;
+      id_token = googleUser.getAuthResponse().id_token;
+      var code = {id: id_token,
+                  access: access_token}
+      connect(code).then(function(result){ {
+          console.log(result);
+          if (result) {
+            window.location.href = '/';
+          } else {
+            console.log('There was an error')
+          }
+        }
+      });
+    }
+</script>
+{% endblock %}
