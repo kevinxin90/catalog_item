@@ -23,6 +23,8 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'
+app.config['SESSION_TYPE'] = 'filesystem'
 
 CLIENT_ID = json.loads(
     open('/var/www/CatalogApp/CatalogApp/client_secret.json', 'r').read())['web']['client_id']
