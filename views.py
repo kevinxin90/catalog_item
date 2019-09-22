@@ -17,7 +17,8 @@ import requests
 auth = HTTPBasicAuth()
 
 
-engine = create_engine('postgresql://catalog:catalog@localhost:5432/catalogwithusers')
+engine = create_engine('postgresql://catalog:catalog@localhost:5432/catalogwithusers',
+    pool_size=20, max_overflow=0)
 
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
