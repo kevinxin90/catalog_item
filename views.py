@@ -17,7 +17,7 @@ import requests
 auth = HTTPBasicAuth()
 
 
-engine = create_engine('sqlite:///catalogwithusers.db')
+engine = create_engine('postgresql://catalog:catalog@localhost:5432/catalogwithusers')
 
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
