@@ -18,7 +18,7 @@ auth = HTTPBasicAuth()
 
 
 engine = create_engine('postgresql://catalog:catalog@localhost:5432/catalogwithusers',
-    pool_size=20, max_overflow=0)
+    pool_size=100, max_overflow=0)
 
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -166,6 +166,7 @@ def gdisconnect():
 def verify_password(username, password):
     session = DBSession()
     user = session.query(User).filter_by(username=username).first()
+    session.close()
     if not user or not user.verify_password(password):
         return False
     g.user = user
@@ -180,14 +181,17 @@ def addUser():
     password = request.json.get("password")
     # check if either username or password is empty
     if username is None or password is None:
+        session.close()
         abort(400)
     # check if user already exist
     if session.query(User).filter_by(username=username).first():
+        session.close()
         abort(400)
     user = User(username=username)
     user.hash_password(password)
     session.add(user)
     session.commit()
+    session.close()
     return jsonify({'username': user.username}), 201
 
 
@@ -381,12 +385,14 @@ def createUser(login_session):
     session.add(newUser)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
+    session.close()
     return user.id
 
 
 def getUserInfo(user_id):
     session = DBSession()
     user = session.query(User).filter_by(id=user_id).one()
+    session.close()
     return user
 
 
@@ -394,6 +400,7 @@ def getUserID(email):
     session = DBSession()
     try:
         user = session.query(User).filter_by(email=email).one()
+        session.close()
         return user.id
     except:
         return None
@@ -403,6 +410,7 @@ def getAllCatalogs():
     """Get all categories in db in serialized format"""
     session = DBSession()
     catalogs = session.query(Catalog).all()
+    session.close()
     return [catalog.serialize for catalog in catalogs]
 
 
@@ -410,6 +418,7 @@ def getCatalogNameByID(cat_id):
     session = DBSession()
     cat_name = session.query(Catalog).filter_by(id=cat_id).first().serialize
     cat_name = cat_name.get('name')
+    session.close()
     return cat_name
 
 
@@ -417,6 +426,7 @@ def getAllItems():
     """Get all items stored in the database along with item info"""
     session = DBSession()
     items = session.query(Item).all()
+    session.close()
     result = []
     for item in items:
         item = item.serialize
@@ -429,6 +439,7 @@ def getCatalogInfoByName(cat_name):
     """Get info about Catalog"""
     session = DBSession()
     item = session.query(Catalog).filter_by(name=cat_name).first()
+    session.close()
     if item:
         return item.serialize
     else:
@@ -440,6 +451,7 @@ def getItemsInCatalog(cat_id):
     session = DBSession()
     cat_name = getCatalogNameByID(cat_id)
     items = session.query(Item).filter_by(cat_id=cat_id)
+    session.close()
     result = []
     for item in items:
         item = item.serialize
@@ -452,6 +464,7 @@ def getItemInfo(item_id):
     """Get info about an item based on item id stored in db"""
     session = DBSession()
     item = session.query(Item).filter_by(id=item_id).first()
+    session.close()
     if item:
         return item.serialize
     else:
@@ -462,6 +475,7 @@ def getItemInfoByName(item_name):
     """Get info about an item based on item id stored in db"""
     session = DBSession()
     item = session.query(Item).filter_by(title=item_name).first()
+    session.close()
     if item:
         return item.serialize
     else:
@@ -476,6 +490,7 @@ def addItemInfo(user_id, title=None, description=None, category=None):
                 description=description, cat_id=cat_id)
     session.add(item)
     session.commit()
+    session.close()
     return item.serialize
 
 
@@ -491,6 +506,7 @@ def editItem(item_id, title=None, description=None, category=None):
         item.cat_id = getCatalogInfoByName(category).get('id')
     session.add(item)
     session.commit()
+    session.close()
     return item.serialize
 
 
@@ -500,6 +516,7 @@ def deleteItem(item_id):
     item = session.query(Item).filter_by(id=item_id).one()
     session.delete(item)
     session.commit()
+    session.close()
     return "item deleted"
 
 
